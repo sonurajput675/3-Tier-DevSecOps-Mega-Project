@@ -1,4 +1,4 @@
-{
+pipeline {
     agent any
     
     tools {
@@ -11,7 +11,7 @@
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project.git'
+                git branch: 'docker-build', url: 'https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project.git'
             }
         }
          stage('Frontend Compilation') {
@@ -56,6 +56,44 @@
          stage('Trivy FS Scan') {
             steps {
                 sh 'trivy fs --format table -o fs-report.html .'
+            }
+        }
+         stage('Build & Tag Puch Backend  Docker Image') {
+            steps {
+               script {
+                  // This step should not normally be used in your script. Consult the inline help for details.
+                        withDockerRegistry(credentialsId: 'docker-cred') {
+                            dir('api'){
+                                sh 'docker build -t sonurajput76/3tierbackend:latest .'
+                                sh 'trivy image --format table -o bacakend-image-report.html sonurajput76/3tierbackend:latest '
+                                sh 'docker push sonurajput76/3tierbackend:latest'
+                           }
+    
+                    }
+               }
+            }
+        }
+          stage('Build & Tag Puch Frontend  Docker Image') {
+            steps {
+               script {
+                  // This step should not normally be used in your script. Consult the inline help for details.
+                        withDockerRegistry(credentialsId: 'docker-cred') {
+                            dir('client'){
+                                sh 'docker build -t sonurajput76/3tierfrontend:latest .'
+                                sh 'trivy image --format table -o frontend-image-report.html sonurajput76/3tierfrontend:latest '
+                                sh 'docker push sonurajput76/3tierfrontend:latest'
+                                
+                           }
+    
+                    }
+               }
+            }
+        }
+        stage('Docker Deploy Via Compose ') {
+            steps {
+                script{
+                    sh'docker-compose up -d '
+                }
             }
         }
     }
