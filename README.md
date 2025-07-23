@@ -31,6 +31,12 @@ This repository contains a simple Node.js API and a React client used for a user
 The client now displays an animated banner welcoming you to **DevOps Shack**.
 
  **SCREENSHOT OF CREATING MANUALUY CI PIPELINE AND PUSH THE IMAGES ON DOCKER HUB**
+
+ 
  ![image alt](https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project/blob/9c1804e7bd73a57bb02777a329fc835889eb18e2/Screenshot%202025-07-22%20111503.png)
+
+ **DOCKER HUB IMAGE**
+
+ ![image alt](https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project/blob/c53a1746f7d125af5a7b7bb23031882b3503b395/Screenshot%202025-07-22%20111355.png)
 
  
