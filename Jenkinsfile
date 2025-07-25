@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    
+    tools {
+        nodejs 'node.js23'
+    }
+    environment{
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project.git'
+            }
+        }
+         stage('Frontend Compilation') {
+            steps {
+                // goto the client directory and written commands execute the all command in client directory
+               dir('client') {
+                 sh 'find . -name "*.js" -exec node --check {} +'  
+               }
+            }
+        }
+        
+         stage('Backend Compilation') {
+            steps {
+                // goto the api directory and written commands execute the all command in api directory
+               dir('api') {
+                   // implement all node command on that who's file save on .js exenstion in api direactory which
+                 sh 'find . -name "*.js" -exec node --check {} +'  
+               }
+            }
+        }
+         stage('Gitleaks Scan') {
+            steps {
+                sh 'gitleaks detect --source ./client --exit-code 1'
+                sh 'gitleaks detect --source ./api --exit-code 1'
+            }
+        }
+         stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar'){
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=NodeJS-Project \
+                           -Dsonar.projectKey=NodeJS-Project '''
+                }
+            }
+        }
+         stage('Quality Gate Check') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+               }
+            }
+        }
+         stage('Trivy FS Scan') {
+            steps {
+                sh 'trivy fs --format table -o fs-report.html .'
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+# Storage class to store persistent data
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-sc
+provisioner: ebs-csi.aws.com
+parameters:
+  type: gp2
+  fsType: ext4
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer 
+
+# This storage class uses the AWS EBS CSI driver to provision persistent volumes.
+# It specifies the type of EBS volume as 'gp2' and the filesystem type as 'ext4'.
+# The reclaim policy is set to 'Retain', meaning that when the persistent volume is deleted, the underlying storage will not be deleted immediately, allowing for data recovery if needed.
+# The volume binding mode is set to 'WaitForFirstConsumer', which means that the volume will only be provisioned when a pod that uses it is scheduled.

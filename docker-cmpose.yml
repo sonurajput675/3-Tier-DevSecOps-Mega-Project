@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+mysql :
+  container_name: mysql_container
+  environment:
+    MYSQL_ROOT_PASSWORD: sonu
+    MYSQL_DATABASE: crud_app
+    MYSQL_USER: root
+    MYSQL_PASSWORD: sonu
+  ports:
+    - "3306:3306"
+  volumes:
+    - mysql_data:/var/lib/mysql
+    - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+backend:
+  container_name: backend-api
+  build:
+    context: ./api
+    dockerfile: Dockerfile
+  ports:
+    - "5000:5000"
+  depends_on:
+    - mysql
+  environment:
+    DB_HOST: mysql
+    DB_PORT: 3306
+    DB_USER: root
+    DB_PASSWORD: sonu
+    JWT_SECRET: devopsShackSuperSecretKey
+    RESET_ADMIN_PASS: 'true'
+frontend:
+  container_name: frontend-app
+  build:
+    context: ./client
+    dockerfile: Dockerfile
+  ports:
+    - "3000:80"
+  depends_on:
+    - backend
+volumes:
+  mysql_data:
+    driver: local
