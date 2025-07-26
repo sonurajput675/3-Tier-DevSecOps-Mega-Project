@@ -39,4 +39,4 @@ The client now displays an animated banner welcoming you to **DevOps Shack**.
 
  ![image alt](https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project/blob/c53a1746f7d125af5a7b7bb23031882b3503b395/Screenshot%202025-07-22%20111355.png)
 
- 
+ ![image alt](https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project/blob/ede6e525df69b223f33e13b95c5beb0b34696dba/Screenshot%202025-07-27%20003214.png)
