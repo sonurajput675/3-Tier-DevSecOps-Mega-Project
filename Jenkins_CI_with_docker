@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'docker-build', url: 'https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project.git'
+                git branch: 'deploy-to-dev-k8s', url: 'https://github.com/sonurajput675/3-Tier-DevSecOps-Mega-Project.git'
             }
         }
          stage('Frontend Compilation') {
